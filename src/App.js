@@ -1,20 +1,50 @@
 import './App.css';
+import React, { useState } from 'react';
 
 function App() {
+  const [name, setName] = useState('');
+  const[datetime,setDatetime] = useState('');
+  const[description, setDescription] = useState('');
+
+  function addNewTransaction(ev){
+    ev.preventDefault();
+    const url = process.env.REACT_APP_API_URL;
+    console.log(url)
+    fetch(url, {
+
+      method: 'POST',
+      headers: {'content-type':'application/json'},
+      body: JSON.stringify({name, description, datetime})
+    }).then(response => {
+      response.json().then(json => {
+
+        console.log('result', json);
+      })
+    })
+    
+  }
   return (
   <main>
     <h1>$400<span>.00</span></h1>
-    <form>
+    <form onSubmit = {addNewTransaction} >
       <div className = "basic">
-      <input type ="text" placeholder = {'+200 nwe samsung tv'}/>
-      <input type = "datetime-local"/>
+      <input type ="text" 
+        value = {name} 
+        onChange = {ev => setName(ev.target.value)}
+        placeholder = {'-$500 new samsung tv'}/>
+
+      <input value = {datetime} onChange = {ev => setDatetime(ev.target.value)}
+       type = "datetime-local"/>
+
       </div>
 
       <div className = "description">
-      <input type = "text" placeholder = {'description'} />
+      <input value={description} 
+        onChange = {ev => setDescription(ev.target.value)}
+        type = "text" placeholder = {'description'} />
       </div>
 
-      <button type = "submit">Add new transaction</button>
+      <button  type = "submit">Add new transaction</button>
       
      </form>
 
@@ -32,11 +62,11 @@ function App() {
 
         <div className = "transaction">
           <div className = "left">
-            <div className = "name">Purchased a Website for my Business</div>
-            <div className = "description">Taking my business to the next level!</div>
+            <div className = "name">Created a Website for my Client</div>
+            <div className = "description">Website Created by Lakshan!</div>
           </div>
           <div className = "right">
-            <div className ="price">-$999</div>
+            <div className ="price green">+$999</div>
             <div className = "datetime">2023-11-04</div>
           </div>
         </div>
